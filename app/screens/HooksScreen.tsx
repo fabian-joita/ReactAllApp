@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-
+//aici am multe de adaugat
 const handleYes = (screenStatus: string) => {
   screenStatus = "playgame";
 };
