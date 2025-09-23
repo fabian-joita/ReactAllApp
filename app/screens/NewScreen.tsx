@@ -28,12 +28,12 @@ const NewScreen = () => {
           >
             <Text style={styles.startGameText}>Press to start new game!</Text>
           </TouchableOpacity>
-          {/* <TouchableOpacity
+          <TouchableOpacity
             onPress={() => navigation.navigate("HooksScreen")}
             style={styles.startGameButton}
           >
             <Text>Catre pagina de Hooks</Text>
-          </TouchableOpacity> */}
+          </TouchableOpacity>
         </View>
 
         <Text style={styles.highScoreText}>HIGH SCORE:</Text>
