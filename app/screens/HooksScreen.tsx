@@ -1,76 +1,79 @@
-// import React from "react";
-// import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-// //aici am multe de adaugat
-// const handleYes = (screenStatus: string) => {
-//   screenStatus = "playgame";
-// };
+import React, { useState } from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-// const handleNO = () => {};
+const StartGame = ({
+  onYes,
+  onNo,
+}: {
+  onYes: () => void;
+  onNo: () => void;
+}) => (
+  <View style={styles.center}>
+    <Text>Are you ready for a new game?</Text>
+    <TouchableOpacity style={styles.StartButtonYES} onPress={onYes}>
+      <Text>YES</Text>
+    </TouchableOpacity>
+    <TouchableOpacity style={styles.StartButtonNO} onPress={onNo}>
+      <Text>NO</Text>
+    </TouchableOpacity>
+  </View>
+);
 
-// const StartGame = (screenStatus: string) => {
-//   console.log("Randare StartGame");
+const PlayGame = ({ onGameOver }: { onGameOver: () => void }) => (
+  <View style={styles.center}>
+    <Text>Playing game...</Text>
+    <TouchableOpacity onPress={onGameOver}>
+      <Text>Finish Game</Text>
+    </TouchableOpacity>
+  </View>
+);
 
-//   return (
-//     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-//       <Text>Are you ready for a new game?</Text>
-//       <TouchableOpacity
-//         style={styles.StartButtonYES}
-//         onPress={() => handleYes(screenStatus)}
-//       >
-//         <Text>YES</Text>
-//       </TouchableOpacity>
-//       <TouchableOpacity style={styles.StartButtonNO} onPress={() => handleNO}>
-//         <Text>NO</Text>
-//       </TouchableOpacity>
-//     </View>
-//   );
-// };
+const GameOver = ({ onRestart }: { onRestart: () => void }) => (
+  <View style={styles.center}>
+    <Text>Game Over!</Text>
+    <TouchableOpacity onPress={onRestart}>
+      <Text>Restart</Text>
+    </TouchableOpacity>
+  </View>
+);
 
-// const PlayGame = () => {
-//   console.log("Randare PlayGame");
+const HooksScreen = () => {
+  const [screenStatus, setScreenStatus] = useState<"start" | "play" | "over">(
+    "start"
+  );
 
-//   return (
-//     <View
-//       style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-//     ></View>
-//   );
-// };
+  if (screenStatus === "start") {
+    return (
+      <StartGame
+        onYes={() => setScreenStatus("play")}
+        onNo={() => setScreenStatus("over")}
+      />
+    );
+  } else if (screenStatus === "play") {
+    return <PlayGame onGameOver={() => setScreenStatus("over")} />;
+  } else {
+    return <GameOver onRestart={() => setScreenStatus("start")} />;
+  }
+};
 
-// const GameOver = () => {
-//   console.log("Randare GameOver");
+const styles = StyleSheet.create({
+  center: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  StartButtonYES: {
+    backgroundColor: "green",
+    padding: 10,
+    borderRadius: 60,
+    margin: 5,
+  },
+  StartButtonNO: {
+    backgroundColor: "red",
+    padding: 10,
+    borderRadius: 60,
+    margin: 5,
+  },
+});
 
-//   return (
-//     <View
-//       style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
-//     ></View>
-//   );
-// };
-
-// const HooksScreen = () => {
-//   let screenStatus: string = "startgame";
-
-//   console.log("Randare HooksScreen");
-
-//   if (screenStatus == "startgame") {
-//     return <StartGame></StartGame>;
-//   } else if (screenStatus == "playgame") {
-//     return <PlayGame></PlayGame>;
-//   } else if (screenStatus == "gameover") {
-//     return <GameOver></GameOver>;
-//   }
-// };
-
-// const styles = StyleSheet.create({
-//   StartButtonYES: {
-//     backgroundColor: "green",
-//     padding: 5,
-//     borderRadius: 60,
-//   },
-//   StartButtonNO: {
-//     backgroundColor: "red",
-//     padding: 5,
-//     borderRadius: 60,
-//   },
-// });
-
-// export default HooksScreen;
+export default HooksScreen;

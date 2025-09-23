@@ -2,7 +2,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeTabs from "./navigation/HomeTabs";
 import GameScreen from "./screens/GameScreen";
-//import HooksScreen from "./screens/HooksScreen";
+import HooksScreen from "./screens/HooksScreen";
 
 export default function App() {
   const Stack = createNativeStackNavigator();
@@ -19,11 +19,11 @@ export default function App() {
         component={GameScreen}
         options={{ headerShown: false }}
       />
-      {/* <Stack.Screen
+      <Stack.Screen
         name="HooksScreen"
         component={HooksScreen}
         options={{ headerShown: false }}
-      /> */}
+      />
     </Stack.Navigator>
   );
 }
