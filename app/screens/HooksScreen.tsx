@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 //new comm
+///new comm test2
 const StartGame = ({
   onYes,
   onNo,
