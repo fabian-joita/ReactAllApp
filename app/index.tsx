@@ -1,29 +1,11 @@
-// App.tsx
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import HomeTabs from "./navigation/HomeTabs";
-import GameScreen from "./screens/GameScreen";
-import HooksScreen from "./screens/HooksScreen";
+import React from "react";
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import RootNavigator from "./navigation/RootNavigator";
 
 export default function App() {
-  const Stack = createNativeStackNavigator();
   return (
-    <Stack.Navigator>
-      <Stack.Screen
-        name="Tabs"
-        component={HomeTabs}
-        options={{ headerShown: false }}
-      />
-
-      <Stack.Screen
-        name="GameScreen"
-        component={GameScreen}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="HooksScreen"
-        component={HooksScreen}
-        options={{ headerShown: false }}
-      />
-    </Stack.Navigator>
+    <SafeAreaProvider>
+      <RootNavigator />
+    </SafeAreaProvider>
   );
 }
