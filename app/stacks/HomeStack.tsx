@@ -21,6 +21,7 @@ export default function HomeStack() {
         <Stack.Screen name="HomeSC" component={HomeScreen} />
         <Stack.Screen name="NewScreen" component={NewScreen} />
         {/* <Stack.Screen name="GameScreen" component={GameScreen} /> */}
+        {/* ////va trebui sa sterg comentariul dupa ce termin de facut tab ul */}
       </Stack.Group>
     </Stack.Navigator>
   );
