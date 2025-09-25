@@ -1,6 +1,6 @@
 // TODO: Implement proper key extraction for FlatList items
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Button,
   FlatList,
@@ -21,31 +21,28 @@ const TodayScreen = () => {
   useEffect(() => {
     const jsonNotes = sthourge.getString("noteInList") ?? "[]";
     const NotesObject: Note[] = JSON.parse(jsonNotes);
-    
+
     NotesList.setNotes(NotesObject);
     setReady(true);
   }, []);
 
   useEffect(() => {
     /**
- * Callback that updates the local state with new notes
- * and persists them to sthourge.
- */
-const handleUpdate = (notes: Note[]) => {
-  setNotes(notes);
-  sthourge.set("noteInList", JSON.stringify(notes));
-};
+     * Callback that updates the local state with new notes
+     * and persists them to sthourge.
+     */
+    const handleUpdate = (notes: Note[]) => {
+      setNotes(notes);
+      sthourge.set("noteInList", JSON.stringify(notes));
+    };
 
-NotesList.subscribe(handleUpdate);
+    NotesList.subscribe(handleUpdate);
 
-/**
- * Unsubscribe when the component unmounts to avoid memory leaks.
- * It's more efficient to have fewer components observing the subject.
- */
-return () => {
-  console.log(
-    "Component is unmounting, handleUnsubscribe will be called."
-  );
+    /**
+     * Unsubscribe when the component unmounts to avoid memory leaks.
+     * It's more efficient to have fewer components observing the subject.
+     */
+    return () => {
       NotesList.unsubscribe(handleUpdate);
     };
   }, [ready]);
@@ -56,37 +53,37 @@ return () => {
   }
 
   const handleAddNote = () => {
-  const now = new Date();
+    const now = new Date();
 
-  const text = handleClick().trim();
+    const text = handleClick().trim();
 
-  if (text) {
-    const note: Note = {
-      id: Date.now().toString(),
-      text,
-      data: now.toLocaleDateString("ro-RO"),
-      hour: now.toLocaleTimeString("ro-RO", {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-    };
+    if (text) {
+      const note: Note = {
+        id: Date.now().toString(),
+        text,
+        data: now.toLocaleDateString("ro-RO"),
+        hour: now.toLocaleTimeString("ro-RO", {
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      };
 
-    NotesList.addNote(note);
+      NotesList.addNote(note);
 
-    textRef.current = "";
-  }
-};
+      textRef.current = "";
+    }
+  };
 
   const handleChangeText = useCallback((text: string) => {
-  textRef.current = text;
-}, []);
+    textRef.current = text;
+  }, []);
 
-const renderItem = useCallback(
-  ({ item }: { item: Note }) => <Item title={item.text} hour={item.hour} />,
-  []
-);
+  const renderItem = useCallback(
+    ({ item }: { item: Note }) => <Item title={item.text} hour={item.hour} />,
+    []
+  );
 
-const keyExtractor = useCallback((item: Note) => item.id, []);
+  const keyExtractor = useCallback((item: Note) => item.id, []);
 
   return (
     <View style={styles.container}>
@@ -96,10 +93,7 @@ const keyExtractor = useCallback((item: Note) => item.id, []);
           style={styles.input}
           onChangeText={handleChangeText}
         />
-        <Button
-          title="Add Note"
-          onPress={handleAddNote}
-        />
+        <Button title="Add Note" onPress={handleAddNote} />
       </View>
       <View style={styles.listContainer}>
         <FlatList
@@ -112,12 +106,12 @@ const keyExtractor = useCallback((item: Note) => item.id, []);
   );
 };
 
-type ItemProps = { 
+type ItemProps = {
   title: string;
   hour: string;
 };
 
-const Item = ({ title, hour }: ItemProps ) => (
+const Item = ({ title, hour }: ItemProps) => (
   <View style={styles.item}>
     <Text style={styles.title}>{title}</Text>
     <Text>{hour}</Text>

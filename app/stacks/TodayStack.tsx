@@ -6,7 +6,7 @@ const Stack = createNativeStackNavigator();
 
 export default function TodayStack() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Group>
         <Stack.Screen name="Today" component={TodayScreen} />
       </Stack.Group>

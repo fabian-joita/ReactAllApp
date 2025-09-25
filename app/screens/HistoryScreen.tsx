@@ -1,6 +1,6 @@
 // TODO: Add a useEffect to render the list after fetching data from sthourge
 
-import React, { useEffect, useState , useCallback } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import NotesList, { Note } from "../observer";
 import { sthourge } from "./TodayScreen";
@@ -42,11 +42,8 @@ const HistoryScreen = () => {
     ),
     []
   );
-  
-  const keyExtractor = useCallback(
-      (item) => item.id,
-      []
-  );
+
+  const keyExtractor = useCallback((item: Note) => item.id, []);
 
   return (
     <View style={styles.container}>

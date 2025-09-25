@@ -23,17 +23,17 @@ const NotesList: {
   notes: [],
   subscribers: [],
 
-// I can write `this.` instead of the subscribers list, referring to the current object
+  // I can write `this.` instead of the subscribers list, referring to the current object
   notify() {
     // Return a copy of all subscribers
 
     this.subscribers.forEach((callback) => callback([...this.notes])); //callback for observer
   },
 
-  subscribe: (callback) => {
-    this.subscribers.push(callback);
+  subscribe: (callback: Subscriber) => {
+    NotesList.subscribers.push(callback);
     // Send current state to new subscriber
-    callback([...this.notes]);
+    callback([...NotesList.notes]);
   },
 
   unsubscribe(callback) {

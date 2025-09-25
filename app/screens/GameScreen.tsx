@@ -21,6 +21,9 @@ import {
  * This component will only re-render if the game is over,
  * at which point a completely new screen will be shown.
  */
+
+const imgForGame = require("@/assets/images/imgForGame.png");
+
 const GameScreen = () => {
   const navigation = useNavigation();
   const { width: SCREEN_WIDTH } = Dimensions.get("window");
@@ -33,29 +36,28 @@ const GameScreen = () => {
   const containerHeight = containerWidth * 1.5;
 
   const pressOnImage = () => {
-  console.log("Rendering pressOnImage function");
-  setLives((lives) => lives - 1);
-  /**
-   * The function executes fully, then the state update happens asynchronously.
-   * setLives will schedule a re-render after this function completes.
-   */
+    console.log("Rendering pressOnImage function");
+    setLives((lives) => lives - 1);
+    /**
+     * The function executes fully, then the state update happens asynchronously.
+     * setLives will schedule a re-render after this function completes.
+     */
   };
-
-  // Outside the component
-  const imgForGame = require("@/assets/images/imgForGame.png");
 
   if (alive == true) {
     return (
       <View style={styles.screen}>
-  <View style={styles.infoBar}>
-    <Text style={styles.infoText}>{lives} {'lives'}</Text>
-    <Text style={styles.infoText}>{'Time'}</Text>
-  </View>
-
-  <Text style={styles.introText}>
-    {'Welcome to the game! Next, you need to find the difference between the two images!'}
-  </Text>
-</View>
+        <View style={styles.infoBar}>
+          <Text style={styles.infoText}>
+            {lives} {"lives"}
+          </Text>
+          <Text style={styles.infoText}>{"Time"}</Text>
+        </View>
+        <Text style={styles.introText}>
+          {
+            "Welcome to the game! Next, you need to find the difference between the two images!"
+          }
+        </Text>
 
         <View
           style={[
@@ -77,7 +79,7 @@ const GameScreen = () => {
   } else {
     return (
       <View>
-        <Text>{'GAME OVER!'}</Text>
+        <Text>{"GAME OVER!"}</Text>
       </View>
     );
   }
@@ -105,7 +107,7 @@ const styles = StyleSheet.create({
     right: 20,
     flexDirection: "row",
     justifyContent: "space-between",
-    backgroundColor: "rgba(0,0,0,0.5)",
+    backgroundColor: "rgba(78, 161, 62, 0.5)",
     padding: 8,
     borderRadius: 10,
     zIndex: 1,
