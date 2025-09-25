@@ -41,6 +41,7 @@ export default function HomeTabs() {
           const tabPress = () => {
             console.log("Schimba la tabul" + " " + name);
           };
+          
           return (
             <Tab.Screen
               listeners={{ tabPress }}

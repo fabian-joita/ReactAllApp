@@ -1,40 +1,45 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-//new comm
-///new comm test2
-//comm for pull request
-const StartGame = ({
-  onYes,
-  onNo,
-}: {
+
+type StartGameProps = {
   onYes: () => void;
   onNo: () => void;
-}) => (
+};
+
+type PlayGameProps = {
+  onGameOver: () => void;
+};
+
+type GameOverProps = {
+  onRestart: () => void;
+};
+
+const StartGame = ({ onYes, onNo }: StartGameProps) => (
   <View style={styles.center}>
-    <Text>Are you ready for a new game?</Text>
+    <Text>{'Are you ready for a new game?'}</Text>
     <TouchableOpacity style={styles.StartButtonYES} onPress={onYes}>
-      <Text>YES</Text>
+      <Text>{'YES'}</Text>
     </TouchableOpacity>
     <TouchableOpacity style={styles.StartButtonNO} onPress={onNo}>
-      <Text>NO</Text>
+      <Text>{'NO'}</Text>
     </TouchableOpacity>
   </View>
 );
 
-const PlayGame = ({ onGameOver }: { onGameOver: () => void }) => (
+const PlayGame = ({ onGameOver }: PlayGameProps) => (
   <View style={styles.center}>
-    <Text>Playing game...</Text>
+    <Text>{'Playing game...'}</Text>
     <TouchableOpacity onPress={onGameOver}>
-      <Text>Finish Game</Text>
+      <Text>{'Finish Game'}</Text>
     </TouchableOpacity>
   </View>
 );
 
-const GameOver = ({ onRestart }: { onRestart: () => void }) => (
+const GameOver = ({ onRestart }: GameOverProps) => (
   <View style={styles.center}>
-    <Text>Game Over!</Text>
+    <Text>{'Game Over!'}</Text>
     <TouchableOpacity onPress={onRestart}>
-      <Text>Restart</Text>
+      <Text>{'Restart'}</Text>
     </TouchableOpacity>
   </View>
 );
@@ -45,10 +50,13 @@ const HooksScreen = () => {
   );
 
   if (screenStatus === "start") {
+    const handleYes = () => setScreenStatus("play");
+    const handleNo = () => setScreenStatus("over");
+
     return (
       <StartGame
-        onYes={() => setScreenStatus("play")}
-        onNo={() => setScreenStatus("over")}
+        onYes={handleYes}
+        onNo={handleNo}
       />
     );
   } else if (screenStatus === "play") {

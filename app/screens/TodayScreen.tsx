@@ -1,4 +1,5 @@
-//de implementat ket pentru liste
+// TODO: Implement proper key extraction for FlatList items
+
 import React, { useEffect, useRef, useState } from "react";
 import {
   Button,
@@ -9,48 +10,83 @@ import {
   View,
 } from "react-native";
 import { MMKV } from "react-native-mmkv";
-import ListaNotite, { Notita } from "../observer";
-export const storage = new MMKV();
+import NotesList, { Note } from "../observer";
+export const sthourge = new MMKV();
 
 const TodayScreen = () => {
   const textRef = useRef<string>("");
-  const [notes, setNotes] = useState<Notita[]>([]);
+  const [notes, setNotes] = useState<Note[]>([]);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    //aici am intrebare
-    //sa mai setez si notes prin useState imediat ?
-    const jsonNotes = storage.getString("notite") ?? "[]";
-    const NotesObject: Notita[] = JSON.parse(jsonNotes);
-    //console.log(NotesObject);
-    //setNotes(NotesObject)
-    ListaNotite.setNotite(NotesObject);
+    const jsonNotes = sthourge.getString("noteInList") ?? "[]";
+    const NotesObject: Note[] = JSON.parse(jsonNotes);
+    
+    NotesList.setNotes(NotesObject);
     setReady(true);
   }, []);
 
   useEffect(() => {
-    // callback care actualizeaza state-ul local cu noile notite
-    const handleUpdate = (notite: Notita[]) => {
-      setNotes(notite);
-      storage.set("notite", JSON.stringify(notite));
-    };
+    /**
+ * Callback that updates the local state with new notes
+ * and persists them to sthourge.
+ */
+const handleUpdate = (notes: Note[]) => {
+  setNotes(notes);
+  sthourge.set("noteInList", JSON.stringify(notes));
+};
 
-    ListaNotite.subscribe(handleUpdate);
+NotesList.subscribe(handleUpdate);
 
-    //trebuie sa fac unsubscrie pentru a nu ajunge la pierderi de memorie
-    //e mai optim sa am mai putine componente care urmaresc subiectu
-    return () => {
-      console.log(
-        "Componenta se demonteaza, deci se va apela si handleUnsubscribe"
-      );
-      ListaNotite.unsubscribe(handleUpdate);
+/**
+ * Unsubscribe when the component unmounts to avoid memory leaks.
+ * It's more efficient to have fewer components observing the subject.
+ */
+return () => {
+  console.log(
+    "Component is unmounting, handleUnsubscribe will be called."
+  );
+      NotesList.unsubscribe(handleUpdate);
     };
   }, [ready]);
 
-  // functie care returneaza textul din input
+  // return input text
   function handleClick() {
     return textRef.current;
   }
+
+  const handleAddNote = () => {
+  const now = new Date();
+
+  const text = handleClick().trim();
+
+  if (text) {
+    const note: Note = {
+      id: Date.now().toString(),
+      text,
+      data: now.toLocaleDateString("ro-RO"),
+      hour: now.toLocaleTimeString("ro-RO", {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+    };
+
+    NotesList.addNote(note);
+
+    textRef.current = "";
+  }
+};
+
+  const handleChangeText = useCallback((text: string) => {
+  textRef.current = text;
+}, []);
+
+const renderItem = useCallback(
+  ({ item }: { item: Note }) => <Item title={item.text} hour={item.hour} />,
+  []
+);
+
+const keyExtractor = useCallback((item: Note) => item.id, []);
 
   return (
     <View style={styles.container}>
@@ -58,41 +94,30 @@ const TodayScreen = () => {
         <TextInput
           placeholder="New note"
           style={styles.input}
-          onChangeText={(text) => (textRef.current = text)}
+          onChangeText={handleChangeText}
         />
         <Button
           title="Add Note"
-          onPress={() => {
-            const now = new Date();
-            const text = handleClick().trim();
-            if (text) {
-              const note: Notita = {
-                id: Date.now().toString(),
-                text,
-                data: now.toLocaleDateString("ro-RO"),
-                ora: now.toLocaleTimeString("ro-RO", {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                }),
-              };
-              ListaNotite.addNotita(note);
-              textRef.current = "";
-            }
-          }}
+          onPress={handleAddNote}
         />
       </View>
       <View style={styles.listContainer}>
         <FlatList
           data={notes}
-          renderItem={({ item }) => <Item title={item.text} hour={item.ora} />}
-          keyExtractor={(item) => item.id}
+          renderItem={renderItem}
+          keyExtractor={keyExtractor}
         />
       </View>
     </View>
   );
 };
 
-const Item = ({ title, hour }: { title: string; hour: string }) => (
+type ItemProps = { 
+  title: string;
+  hour: string;
+};
+
+const Item = ({ title, hour }: ItemProps ) => (
   <View style={styles.item}>
     <Text style={styles.title}>{title}</Text>
     <Text>{hour}</Text>

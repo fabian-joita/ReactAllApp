@@ -1,62 +1,63 @@
-export type Notita = {
+export type Note = {
   id: string;
   text: string;
   data: string;
-  ora: string;
+  hour: string;
 };
 
-type Subscriber = (notite: Notita[]) => void;
+type Subscriber = (notes: Note[]) => void;
 
-const ListaNotite: {
-  notite: Notita[];
+const NotesList: {
+  notes: Note[];
   subscribers: Subscriber[];
 
   subscribe: (callback: Subscriber) => void;
   unsubscribe: (callback: Subscriber) => void;
 
-  setNotite: (notite: Notita[]) => void;
-  addNotita: (notita: Notita) => void;
-  clearNotite: () => void;
-  getNotite: () => Notita[];
+  setNotes: (notes: Note[]) => void;
+  addNote: (Note: Note) => void;
+  clearNotes: () => void;
+  getNotes: () => Note[];
   notify: () => void;
 } = {
-  notite: [],
+  notes: [],
   subscribers: [],
 
-  //pot scrie this. in loc de Lista subscribers facand referinta la obiectul curent
+// I can write `this.` instead of the subscribers list, referring to the current object
   notify() {
-    // Trimite o copie a listei tuturor subscriberilor
-    this.subscribers.forEach((callback) => callback([...this.notite])); //callback apel la functia observer
+    // Return a copy of all subscribers
+
+    this.subscribers.forEach((callback) => callback([...this.notes])); //callback for observer
   },
 
-  subscribe(callback) {
+  subscribe: (callback) => {
     this.subscribers.push(callback);
-    // Trimite imediat starea curentă la noul subscriber
-    callback([...this.notite]);
+    // Send current state to new subscriber
+    callback([...this.notes]);
   },
 
   unsubscribe(callback) {
     this.subscribers = this.subscribers.filter((cb) => cb !== callback);
   },
 
-  addNotita(notita) {
-    this.notite.push(notita);
+  addNote(Note) {
+    this.notes.push(Note);
     this.notify();
   },
 
-  clearNotite() {
-    this.notite = [];
+  clearNotes() {
+    this.notes = [];
     this.notify();
   },
 
-  getNotite() {
-    return [...this.notite];
+  getNotes() {
+    return [...this.notes];
   },
 
-  setNotite(vect) {
-    this.notite = vect;
+  setNotes(vect) {
+    this.notes = vect;
     this.notify();
   },
 };
 
-export default ListaNotite;
+export default NotesList;

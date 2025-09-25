@@ -1,9 +1,9 @@
-//trebuie sa adaug useeffectul pentru randarea listei dupa ce ia datele din storage
+// TODO: Add a useEffect to render the list after fetching data from sthourge
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState , useCallback } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
-import ListaNotite, { Notita } from "../observer";
-import { storage } from "./TodayScreen";
+import NotesList, { Note } from "../observer";
+import { sthourge } from "./TodayScreen";
 
 type ItemProps = { title: string; date: string; hour: string };
 
@@ -16,34 +16,44 @@ const Item = ({ title, date, hour }: ItemProps) => (
 );
 
 const HistoryScreen = () => {
-  const [notes, setNotes] = useState<Notita[]>([]);
+  const [notes, setNotes] = useState<Note[]>([]);
 
   useEffect(() => {
-    const jsonNotes = storage.getString("notite") ?? "[]";
-    const NotesObject: Notita[] = JSON.parse(jsonNotes);
-    ListaNotite.setNotite(NotesObject);
+    const jsonNotes = sthourge.getString("noteInList") ?? "[]";
+    const NotesObject: Note[] = JSON.parse(jsonNotes);
+    NotesList.setNotes(NotesObject);
 
     console.log(NotesObject);
 
-    const handleUpdate = (notite: Notita[]) => {
-      setNotes(notite);
+    const handleUpdate = (notes: Note[]) => {
+      setNotes(notes);
     };
 
-    ListaNotite.subscribe(handleUpdate);
+    NotesList.subscribe(handleUpdate);
 
     return () => {
-      ListaNotite.unsubscribe(handleUpdate);
+      NotesList.unsubscribe(handleUpdate);
     };
   }, []);
+
+  const renderItem = useCallback(
+    ({ item }: { item: Note }) => (
+      <Item title={item.text} date={item.data} hour={item.hour} />
+    ),
+    []
+  );
+  
+  const keyExtractor = useCallback(
+      (item) => item.id,
+      []
+  );
 
   return (
     <View style={styles.container}>
       <FlatList
         data={notes}
-        renderItem={({ item }) => (
-          <Item title={item.text} date={item.data} hour={item.ora} />
-        )}
-        keyExtractor={(item) => item.id}
+        renderItem={renderItem}
+        keyExtractor={keyExtractor}
       />
     </View>
   );

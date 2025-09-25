@@ -10,43 +10,52 @@ import {
   View,
 } from "react-native";
 
-//pentru a optimiza si usura urmarirea codului , ar fi necesara folosirea state ului pentru lives
-//intern intr un child pentru a nu reranda de fiecare data componenta princiala a ecranului in intregime
-//astfel aceasta componenta o sa se rerandeze doar daca este game over si va aparea total alt screen
+/**
+ * For better optimization and easier code tracking,
+ * consider using state to manage lives.
+ */
+
+/**
+ * Nested inside a child component to avoid re-rendering
+ * the entire main screen every time.
+ * This component will only re-render if the game is over,
+ * at which point a completely new screen will be shown.
+ */
 const GameScreen = () => {
   const navigation = useNavigation();
   const { width: SCREEN_WIDTH } = Dimensions.get("window");
   const [lives, setLives] = useState(3);
-  let alive = true;
+  const alive = lives > 0;
 
-  console.log("se rerandeaza componenta root");
   console.log("Nmb of lives" + " " + lives);
-
-  if (lives <= 0) {
-    alive = false;
-  }
 
   const containerWidth = SCREEN_WIDTH * 0.8;
   const containerHeight = containerWidth * 1.5;
 
   const pressOnImage = () => {
-    console.log("randez fct pressOnImage");
-    setLives((lives) => lives - 1);
-    //aici o sa treaca prin intreaga functie pressonimg, apoi intra in set
+  console.log("Rendering pressOnImage function");
+  setLives((lives) => lives - 1);
+  /**
+   * The function executes fully, then the state update happens asynchronously.
+   * setLives will schedule a re-render after this function completes.
+   */
   };
+
+  // Outside the component
+  const imgForGame = require("@/assets/images/imgForGame.png");
 
   if (alive == true) {
     return (
       <View style={styles.screen}>
-        <View style={styles.infoBar}>
-          <Text style={styles.infoText}>{lives} vieți</Text>
-          <Text style={styles.infoText}>Timp</Text>
-        </View>
+  <View style={styles.infoBar}>
+    <Text style={styles.infoText}>{lives} {'lives'}</Text>
+    <Text style={styles.infoText}>{'Time'}</Text>
+  </View>
 
-        <Text style={styles.introText}>
-          Bine ai intrat în joc! În continuare trebuie să găsești diferența
-          dintre cele 2 imagini!
-        </Text>
+  <Text style={styles.introText}>
+    {'Welcome to the game! Next, you need to find the difference between the two images!'}
+  </Text>
+</View>
 
         <View
           style={[
@@ -56,7 +65,7 @@ const GameScreen = () => {
         >
           <Pressable onPress={pressOnImage}>
             <Image
-              source={require("@/assets/images/imgForGame.png")}
+              source={imgForGame}
               style={styles.image}
               resizeMode="contain"
             />
@@ -68,7 +77,7 @@ const GameScreen = () => {
   } else {
     return (
       <View>
-        <Text> GAME OVER!</Text>
+        <Text>{'GAME OVER!'}</Text>
       </View>
     );
   }
