@@ -1,14 +1,10 @@
 import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import React, { useCallback } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-import { HomeStackParamList } from "../stacks/HomeStack";
 
-type HomeScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList>;
-
+// TODO: Solve error at line 10
 const HomeScreen = () => {
-  const navigation = useNavigation<HomeScreenNavigationProp>(); //ori pun any pentru a arata typescriptului ca eu stiu mai bine decat el
-  //altfel fac definire a stivei
+  const navigation = useNavigation();
 
   const onPress = useCallback(() => {
     navigation.navigate("NewScreen");

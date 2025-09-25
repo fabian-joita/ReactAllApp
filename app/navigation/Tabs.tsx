@@ -7,6 +7,8 @@ import TodayStack from "../stacks/TodayStack";
 
 const Tab = createBottomTabNavigator();
 
+// TODO: Figure out how to hide the tab bar without causing lag and without affecting the components on that screen
+
 type TabType = {
   name: string;
   component: ComponentType<any>;
