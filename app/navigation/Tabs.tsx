@@ -6,8 +6,6 @@ import TodayStack from "../stacks/TodayStack";
 
 const Tab = createBottomTabNavigator();
 
-// TODO: Figure out how to hide the tab bar without causing lag and without affecting the components on that screen
-
 type TabType = {
   name: string;
   component: ComponentType<any>;
@@ -39,12 +37,6 @@ const tabs: TabType[] = [
 const listOfTabs = tabs;
 
 export default function Tabs(props: TabsProps) {
-  const visibleRoutes = ["HomeScreen", "HistoryScreen", "TodayScreen"];
-  const hide = props.routeName
-    ? !visibleRoutes.includes(props.routeName)
-    : false;
-
-  console.log(props.routeName + "in tabs");
   return (
     <Tab.Navigator>
       <Tab.Group>
@@ -61,8 +53,6 @@ export default function Tabs(props: TabsProps) {
               component={component}
               options={{
                 title: label,
-                tabBarStyle: { display: hide ? "none" : "flex" },
-                headerShown: !hide,
               }}
             />
           );

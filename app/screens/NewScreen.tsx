@@ -1,10 +1,8 @@
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { useNavigation }  from '@react-navigation/native';
-import React from "react";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { HomeStackParamList } from "../stacks/HomeStack";
+import { RootStackParamList } from "../navigation/RootNavigator";
 
-type HomeScreenNavigationProp = NativeStackNavigationProp<HomeStackParamList>;
+type HomeScreenNavigationProp = NavigationProp<RootStackParamList>;
 
 const NewScreen = () => {
   const navigation = useNavigation<HomeScreenNavigationProp>();
@@ -12,13 +10,13 @@ const NewScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.innerContainer}>
-        <Text style={styles.title}>{'Welcome to my Game!'}</Text>
+        <Text style={styles.title}>{"Welcome to my Game!"}</Text>
 
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           style={styles.backButton}
         >
-          <Text style={styles.backButtonText}>{'BACK'}</Text>
+          <Text style={styles.backButtonText}>{"BACK"}</Text>
         </TouchableOpacity>
 
         <View style={styles.startGameContainer}>
@@ -26,19 +24,21 @@ const NewScreen = () => {
             onPress={() => navigation.navigate("GameScreen")}
             style={styles.startGameButton}
           >
-            <Text style={styles.startGameText}>{'Press to start new game!'}</Text>
+            <Text style={styles.startGameText}>
+              {"Press to start new game!"}
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => navigation.navigate("HooksScreen")}
             style={styles.startGameButton}
           >
-            <Text>{'Catre pagina de Hooks'}</Text>
+            <Text>{"Catre pagina de Hooks"}</Text>
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.highScoreText}>{'HIGH SCORE:'}</Text>
+        <Text style={styles.highScoreText}>{"HIGH SCORE:"}</Text>
         <Text style={styles.highScoreValue}>
-           {'aici o sa apara secundele minime'}
+          {"aici o sa apara secundele minime"}
         </Text>
       </View>
     </View>

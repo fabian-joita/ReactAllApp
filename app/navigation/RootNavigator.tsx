@@ -1,39 +1,37 @@
-import {
-  createNavigationContainerRef,
-  NavigationContainer,
-} from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { useState } from "react";
+import GameScreen from "../screens/GameScreen";
+import HooksScreen from "../screens/HooksScreen";
+import NewScreen from "../screens/NewScreen";
 import Tabs from "./Tabs";
 
-const Stack = createNativeStackNavigator();
-const navigationRef = createNavigationContainerRef();
+export type RootStackParamList = {
+  Tabs: undefined;
+  NewScreen: undefined;
+  GameScreen: undefined;
+  HooksScreen: undefined;
+};
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const RootNavigator = () => {
-  const [routeName, setRouteName] = useState<string>("HomeScreen");
-  console.log(routeName + "1");
-  const onReady = () => {
-    const currentRoute = navigationRef.getCurrentRoute();
-    setRouteName(currentRoute?.name ?? "HomeScreen");
-  };
-
-  const onStateChange = () => {
-    const currentRoute = navigationRef.getCurrentRoute();
-
-    setRouteName(currentRoute?.name ?? "HomeScreen");
-    console.log(routeName + "2");
-  };
-
   return (
-    <NavigationContainer
-      ref={navigationRef}
-      onReady={onReady}
-      onStateChange={onStateChange}
-    >
+    <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Tabs" options={{ headerShown: false }}>
-          {() => <Tabs routeName={routeName} />}
-        </Stack.Screen>
+        <Stack.Screen
+          name="Tabs"
+          options={{ headerShown: false }}
+          component={Tabs}
+        ></Stack.Screen>
+        <Stack.Group
+          screenOptions={{
+            headerShown: false,
+          }}
+        >
+          <Stack.Screen name="NewScreen" component={NewScreen} />
+          <Stack.Screen name="GameScreen" component={GameScreen} />
+          <Stack.Screen name="HooksScreen" component={HooksScreen} />
+        </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>
   );
