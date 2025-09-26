@@ -1,11 +1,17 @@
-import React from "react";
+// App.tsx
+import { NavigationContainer } from "@react-navigation/native";
+import { registerRootComponent } from "expo";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import RootNavigator from "./navigation/RootNavigator";
+
+registerRootComponent(App);
 
 export default function App() {
   return (
     <SafeAreaProvider>
-      <RootNavigator />
+      <NavigationContainer>
+        <RootNavigator />
+      </NavigationContainer>
     </SafeAreaProvider>
   );
 }
