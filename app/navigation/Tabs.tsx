@@ -1,6 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import type { ComponentType } from "react";
-import React from "react";
+import { type ComponentType } from "react";
 import HistoryStack from "../stacks/HistoryStack";
 import HomeStack from "../stacks/HomeStack";
 import TodayStack from "../stacks/TodayStack";
@@ -13,6 +12,10 @@ type TabType = {
   name: string;
   component: ComponentType<any>;
   label: string;
+};
+
+type TabsProps = {
+  routeName?: string;
 };
 
 const tabs: TabType[] = [
@@ -35,7 +38,13 @@ const tabs: TabType[] = [
 
 const listOfTabs = tabs;
 
-export default function HomeTabs() {
+export default function Tabs(props: TabsProps) {
+  const visibleRoutes = ["HomeScreen", "HistoryScreen", "TodayScreen"];
+  const hide = props.routeName
+    ? !visibleRoutes.includes(props.routeName)
+    : false;
+
+  console.log(props.routeName + "in tabs");
   return (
     <Tab.Navigator>
       <Tab.Group>
@@ -50,7 +59,11 @@ export default function HomeTabs() {
               key={name}
               name={name}
               component={component}
-              options={{ title: label }}
+              options={{
+                title: label,
+                tabBarStyle: { display: hide ? "none" : "flex" },
+                headerShown: !hide,
+              }}
             />
           );
         })}
