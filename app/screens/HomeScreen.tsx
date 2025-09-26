@@ -1,14 +1,12 @@
-import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { useCallback } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-import { RootStackParamList } from "../navigation/RootNavigator";
 
-// TODO: Solve error at line 10
 const HomeScreen = () => {
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const navigation = useNavigation();
 
   const onPress = useCallback(() => {
-    navigation.navigate("NewScreen");
+    navigation.getParent()?.navigate("NewScreen");
   }, [navigation]);
 
   return (
